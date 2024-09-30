@@ -1,18 +1,6 @@
 from credentials import credenciais_banco_alldata, credenciais_banco_allnexus
 import pandas as pd
 
-def consulta_qtd_demitidos():
-    conn = credenciais_banco_alldata()
-    query = '''
-                select COUNT(dt_demissao) as qtd_demitidos from QUADRO_FT 
-                where dt_demissao is not null
-                
-                '''
-    
-    df = pd.read_sql(query,conn)
-
-    return df
-
 def consulta_pessoas_alldata():
     conn = credenciais_banco_alldata()
     query = '''
@@ -49,17 +37,22 @@ def consulta_pessoas_allnexus():
 def atualiza_cadastro_banco_allnexus(nome_razaosocial,cpf_cnpj,setor,cargo,ativo):
     conn = credenciais_banco_allnexus()
     query = '''
-                UPDATE public.users
+                UPDATE public.users_teste
                 SET 
-                name={nome_razaosocial}, 
+                name='{nome_razaosocial}', 
                 cpf_cnpj={cpf_cnpj}, 
-                setor={setor}, 
-                cargo={cargo}, 
+                setor='{setor}', 
+                cargo='{cargo}', 
                 ativo={ativo},  
                 updated_at= NOW()
-                WHERE cpf_cnpj = {cpf_cnpj};                   
+                WHERE cpf_cnpj = '{cpf_cnpj}';                   
                 '''.format(nome_razaosocial=nome_razaosocial,cpf_cnpj=cpf_cnpj,setor=setor,cargo=cargo,ativo=ativo)
-    
-    df = pd.read_sql(query,conn)
+    try:
+        # Abrindo um cursor para executar a query de atualização
+        with conn.cursor() as cursor:
+            cursor.execute(query)  # Executa a query de atualização
+            conn.commit()  # Confirma a transação
+            print("Atualização realizada com sucesso.")
+    except Exception as e:
+        print(f"Erro ao executar a atualização: {e}")
 
-    return df

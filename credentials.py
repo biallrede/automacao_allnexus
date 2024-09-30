@@ -14,11 +14,15 @@ def credenciais_banco_alldata():
     return engine
 
 def credenciais_banco_allnexus():
-    conn = psycopg2.connect(
-                        host='177.66.167.90',
-                        port='5432',
-                        database='allnexus',
-                        user='novosprodutos',
-                        password='NovosProdutos@2024')
-    
+    try:
+        conn = psycopg2.connect(
+            host='177.66.167.90',
+            port='5432',
+            database='allnexus',
+            user='novosprodutos',
+            password='NovosProdutos@2024'
+        )
+        print("Conexão bem-sucedida!")
+    except Exception as e:
+        print('erro:',e)
     return conn
