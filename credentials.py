@@ -8,7 +8,7 @@ def credenciais_banco_alldata():
     username = 'user_allnexus'
     password = 'uKl041xn8HIw0WF'
 
-    connection_string = f'mssql+pyodbc://{username}:{password}@{server}/{database}?driver=ODBC+Driver+17+for+SQL+Server'
+    connection_string = f'mssql+pyodbc://{username}:{password}@{server}/{database}?driver=ODBC+Driver+18+for+SQL+Server'
     engine = create_engine(connection_string,fast_executemany=True)
     return engine
 
