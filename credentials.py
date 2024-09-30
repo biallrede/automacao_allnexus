@@ -9,7 +9,7 @@ def credenciais_banco_alldata():
     password = 'uKl041xn8HIw0WF'
 
     # connection_string = f'mssql+pyodbc://{username}:{password}@{server}/{database}'
-    connection_string = f'mssql+pyodbc://{username}:{password}@{server}/{database}?driver=ODBC+Driver+18+for+SQL+Server'
+    connection_string = f'mssql+pyodbc://{username}:{password}@{server}/{database}?driver=ODBC+Driver+18+for+SQL+Server&TrustServerCertificate=yes'
     engine = create_engine(connection_string,fast_executemany=True)
     return engine
 
