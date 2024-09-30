@@ -1,0 +1,8 @@
+pyodbc
+pandas
+uvicorn
+psycopg2
+multipart 
+apscheduler
+schedule
+sqlalchemy
