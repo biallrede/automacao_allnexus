@@ -6,8 +6,8 @@ def consulta_pessoas_alldata():
     query = '''
                 select 
                 a.id_quadro,
-                b.nome_razaosocial,
-                --b.cpf_cnpj,
+                b.nome_razaosocial as name,
+                b.cpf_cnpj,
                 c.descricao as setor,
                 d.nome as cargo,
                 case when a.dt_demissao is not null then 0 else 1 end as status
@@ -16,6 +16,7 @@ def consulta_pessoas_alldata():
                 left join DOMINIO_DADOS_PESSOAIS b on b.id_dados_pessoais = a.id_dados_pessoais
                 left join HIERARQUIA_SETOR c on c.id_setor = a.id_setor
                 left join DOMINIO_DM_CARGO d on d.id_cargo = a.id_cargo
+                where a.dt_demissao is null
                 '''
     
     df = pd.read_sql(query,conn)
@@ -25,8 +26,8 @@ def consulta_pessoas_alldata():
 def consulta_pessoas_allnexus():
     conn = credenciais_banco_allnexus()
     query = '''
-                select name as nome_razaosocial, 
-                --cpf_cnpj, 
+                select name, 
+                cpf_cnpj, 
                 setor, cargo, id_quadro
                 from users                    
                 '''
@@ -35,18 +36,20 @@ def consulta_pessoas_allnexus():
 
     return df
 
-def atualiza_cadastro_banco_allnexus(nome_razaosocial,id_quadro,setor,cargo,ativo):
+def atualiza_cadastro_banco_allnexus(nome_razaosocial,id_quadro,setor,cargo,ativo,cpf_cnpj):
     conn = credenciais_banco_allnexus()
     query = '''
                 UPDATE public.users
                 SET 
+                id_quadro={id_quadro},
+                cpf_cnpj='{cpf_cnpj}',
                 name='{nome_razaosocial}', 
                 setor='{setor}', 
                 cargo='{cargo}', 
                 ativo={ativo},  
                 updated_at= NOW()
-                WHERE id_quadro = {id_quadro};                   
-                '''.format(nome_razaosocial=nome_razaosocial,id_quadro=id_quadro,setor=setor,cargo=cargo,ativo=ativo)
+                WHERE name like '%{nome_razaosocial}%';                   
+                '''.format(nome_razaosocial=nome_razaosocial,id_quadro=id_quadro,setor=setor,cargo=cargo,ativo=ativo,cpf_cnpj=cpf_cnpj)
     # print(query)
     try:
         # Abrindo um cursor para executar a query de atualização
