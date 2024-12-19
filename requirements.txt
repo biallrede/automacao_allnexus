@@ -6,3 +6,4 @@ multipart
 apscheduler
 schedule
 sqlalchemy
+fastapi
